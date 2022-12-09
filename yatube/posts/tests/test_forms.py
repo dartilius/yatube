@@ -139,7 +139,6 @@ class FormsTests(TestCase):
                 text=form_data['text'],
                 author=FormsTests.user,
                 group=form_data['group'],
-                image='posts/small.gif'
             ).count()
         )
         self.assertTrue(response.status_code, 201)

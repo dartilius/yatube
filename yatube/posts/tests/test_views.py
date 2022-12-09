@@ -257,12 +257,11 @@ class ViewsTests(TestCase):
             group=ViewsTests.group
         )
         response = self.author.get(ViewsTests.index_url)
-        page_post = response.context['posts'][0]
-        self.assertEqual(page_post, new_post)
+        page_index = response.content
         new_post.delete()
         response = self.author.get(ViewsTests.index_url)
-        new_page_post = response.context['posts'][0]
-        self.assertEqual(new_page_post, page_post)
+        new_page_index = response.content
+        self.assertEqual(new_page_index, page_index)
 
     def test_following(self):
         """Проверяем что пользователь может подписываться на авторов."""
