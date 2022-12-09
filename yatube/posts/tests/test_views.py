@@ -3,7 +3,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from ..forms import PostForm
-from ..models import Post, Group, Comment, Follow
+from ..models import Post, Group, Follow, Comment
 
 User = get_user_model()
 LIMIT = 10
@@ -244,6 +244,10 @@ class ViewsTests(TestCase):
         )
         # проверяем что количество комментириев в базе не меняется
         self.assertEqual(Comment.objects.count(), count)
+        self.assertRedirects(
+            response,
+            f'/auth/login/?next=/posts/{ViewsTests.post.pk}/comment/'
+        )
 
     def test_cache_on_index_page(self):
         """Проверяем кеширование главной страницы."""

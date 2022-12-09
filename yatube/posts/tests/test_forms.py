@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..models import Post, Group, Comment
+from ..models import Post, Group
 
 User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
@@ -134,11 +134,6 @@ class FormsTests(TestCase):
             follow=True
         )
         self.assertEqual(Post.objects.count(), count + 1)
-        post = Post.objects.filter(
-                text=form_data['text'],
-                author=FormsTests.user,
-                group=form_data['group'],
-            )[0]
         self.assertTrue(
             Post.objects.filter(
                 text=form_data['text'],
@@ -147,3 +142,4 @@ class FormsTests(TestCase):
                 image='posts/small.gif'
             ).count()
         )
+        self.assertTrue(response.status_code, 201)
