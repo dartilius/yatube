@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from posts.forms import PostForm, CommentForm
-from posts.models import Group, Post, User, Comment, Follow
+from posts.models import Group, Post, User, Follow
 from posts.utils import get_page
 
 LIMIT = 10

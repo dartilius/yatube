@@ -266,12 +266,6 @@ class ViewsTests(TestCase):
 
     def test_following(self):
         """Проверяем что пользователь может подписываться на авторов."""
-        # создадим пост другого потзователя
-        new_post = Post.objects.create(
-            author=self.auth_user,
-            text='Кешированный пост',
-            group=ViewsTests.group
-        )
         # подпишемся на автора
         response = self.authorized_client.get(ViewsTests.follow_url)
         self.assertTrue(
