@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load cache %}
+{% block title %}
+  Последние обновления на сайте
+{% endblock %}
+{% block content %}
+<!-- класс py-5 создает отступы сверху и снизу блока -->
+<div class="container py-5">
+  <h1>Последние обновления на сайте</h1>
+    {% include 'posts/includes/switcher.html' %}
+    {% cache 20 sidebar %}
+    {% for post in page_obj %}
+    <ul>
+      {% include 'includes/post.html' %}
+    </ul>
+    <ul>
+      <li>
+        <a href="{% url 'posts:profile' post.author %}">
+          все посты пользователя
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
+      </li>
+    </ul>
+    {% if not forloop.last %}<hr>{% endif %}
+    <!-- под последним постом нет линии -->
+  {% endfor %}
+  {% endcache %}
+  {% include 'posts/includes/paginator.html' %}
+</div>
+{% endblock %}
