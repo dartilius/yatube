@@ -25,7 +25,7 @@ def group_posts(request, slug):
     """Метод отображения страницы с постами группы."""
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()
+    posts = group.posts.select_related('author')
     page_obj = get_page(request, posts, LIMIT)
     context = {
         'group': group,
@@ -44,8 +44,7 @@ def profile(request, username):
     count_posts = posts.count()
     following = False
     if request.user.is_authenticated:
-        if Follow.objects.filter(user=request.user, author=user).count():
-            following = True
+        following = Follow.objects.filter(user=request.user, author=user).exists()
     context = {
         'username': user,
         'posts': posts,
@@ -124,8 +123,6 @@ def add_comment(request, post_id):
         comment.post = post
         comment.save()
         return redirect('posts:post_detail', post_id=post_id)
-    form = CommentForm()
-    return render('', context={'form': form})
 
 
 @login_required
@@ -147,9 +144,9 @@ def profile_follow(request, username):
     """Подписаться на автора."""
     author = get_object_or_404(User, username=username)
     user = request.user
-    if author != user:
-        if not Follow.objects.filter(user=user, author=author).count():
-            Follow.objects.create(user=request.user, author=author)
+    is_exist = Follow.objects.filter(user=user, author=author).exists()
+    if author != user and not is_exist:
+        Follow.objects.create(user=request.user, author=author)
     return redirect('posts:profile', username)
 
 
